@@ -1,0 +1,148 @@
+<!-- # Copyright 2021 Vitalant
+# Author: Vincent Chiang
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# The software is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this software. If not, see <http://www.gnu.org/licenses/>. -->
+
+<!DOCTYPE html>
+<html lang="en">
+   <body>
+      <div style="display: flex;">
+         <form action = "/logout">
+            <p><input type = "submit" value = "Logout" /></p>
+         </form>
+         <form action = "/change">
+            <p><input type = "submit" value = "Change Password" /></p>
+         </form>
+      </div>
+      {% if admin%}
+      <div style="display: flex;">
+         <form action = "/register" method = "GET">
+            <p><input type = "submit" value = "Register" /></p>
+         </form>
+         <form action = "/manage" method = "GET">
+            <p><input type = "submit" value = "Manage" /></p>
+         </form>
+      </div>
+      {% endif %}
+      <div>
+         <form action = "/saved"" method = "POST">
+            <p><input type = "submit" value = "Saved Queries"/></p>
+         </form>
+      </div>
+      <p>Select Table Name (At least one):</p>
+      <form action = "/input" method = "POST" id = 't_select'>
+         <p>
+         <select class = "tName" name = "table" required>
+            <option value = "" >--Please choose a Table--</option>
+            {% for name in names %}
+            <option value= "{{name}}">{{name}}</option>"
+            {% endfor %}
+          </select>
+         </p>
+          <!-- {% for name in names %}
+          <div>
+          <input type = checkbox name = "table" value = {{name}} required> {{name}} </input>
+         </div>
+          {% endfor %} -->
+          <p>
+            <button class="add">Add Tabless</button>
+            <input type = "submit" value = "Submit" />
+         </p>
+      </form>
+      <figure>
+         <img src="/static/pictures/join_explanation.png">
+         <figcaption> Courtesy of https://www.w3schools.com/sql/sql_join.asp</figcaption>
+      </figure>
+      <script src="https://code.jquery.com/jquery-3.6.0.js" type="text/javascript"></script>  
+      <script>
+         // $(function(){
+
+         //    var requiredCheckboxes = $(':checkbox[required]');
+
+         //    requiredCheckboxes.change(function(){
+
+         //       if(requiredCheckboxes.is(':checked')) {
+         //          requiredCheckboxes.removeAttr('required');
+         //       }
+
+         //       else {
+         //          requiredCheckboxes.attr('required', 'required');
+         //       }
+         //    });
+
+         //    });
+
+         function createJoin (){
+            var joinT = document.createElement("select");
+            joinT.name = "joinT"
+            var arr = ["INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "OUTER JOIN"];
+            for (var i = 0; i < arr.length; i++){
+               var temp = document.createElement("option");
+               temp.value = arr[i];
+               temp.text = arr[i];
+               joinT.appendChild(temp);
+               }
+               return joinT
+            }
+
+         function removeDups(){
+            var selectedValues = [];
+            $('.tName').each(function() {
+               var thisValue = this.value;
+               if(thisValue !== '')
+                  selectedValues.push(thisValue);
+            }).each(function() {
+               $(this).find('option:not(:selected)').each(function() {
+                  if( $.inArray( this.value, selectedValues ) === -1 ) {
+                  $(this).removeAttr('hidden');
+                  } else {
+                  if(this.value !== '')
+                     $(this).attr('hidden', 'hidden');
+                  }
+               });
+            });
+         }
+         
+         $(".add").click(function() {
+
+            var temp = $("#t_select > p:first-child").clone(true);
+            var button = document.createElement("BUTTON");
+            button.setAttribute("class", "remove");
+            button.innerHTML = "Remove";
+            button.addEventListener("click", function() {
+               $(this).parent().remove();
+               return false;
+            })
+            temp.append(button);
+              
+            temp.prepend(createJoin());
+
+            temp.insertBefore("#t_select > p:last-child");
+            
+            removeDups();
+            return false;
+         });
+
+         /* $(".remove").click(function() {
+         $(this).parent().remove();
+            return false;
+         }); */
+         
+         $('.tName').change(function() {
+            removeDups();
+         }).trigger('change'); // run at load
+            
+      </script>
+   </body>
+</html>
