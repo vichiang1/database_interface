@@ -139,3 +139,6 @@ cython_debug/
 
 # Ignore sqlite database
 db.sqlite
+
+# Ignore the Python virtual environment
+db_interface_venv/
