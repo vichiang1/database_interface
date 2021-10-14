@@ -20,7 +20,7 @@ User Logins: The application uses FLASK_SECURITY to implement a login system whe
 
 Saved Queries: Users have the ability to save the cuurent query to their account and access it at a later time.
 
-## Installation and running
+## Installation and execution
 
 The application can be run on any Unix-based machine that has Python 3 available by 
 
